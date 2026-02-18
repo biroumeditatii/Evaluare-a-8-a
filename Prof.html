@@ -2,69 +2,43 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panou Control Profesor - Evaluare Națională</title>
+    <title>Control Profesor - Evaluare VIII</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f0f0; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        h1 { color: #333; margin-top: 20px; }
-        
-        /* Containerul pentru butoane cu efectul de dungi din imagine */
-        .button-list { width: 100%; max-width: 400px; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
-        
-        .row { display: flex; justify-content: center; padding: 12px 0; border-bottom: 1px solid #eee; }
-        .row:nth-child(even) { background-color: #f9f9f9; } /* Fundal gri deschis alternativ */
-        .row:nth-child(odd) { background-color: #ffffff; }
-
-        .btn-green {
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            min-width: 180px;
-            transition: background 0.2s, transform 0.1s;
-        }
-        .btn-green:hover { background-color: #4cae4c; transform: scale(1.02); }
-        .btn-green:active { transform: scale(0.98); }
-
-        .btn-stop { background-color: #d9534f; margin-top: 20px; margin-bottom: 40px; }
-        .btn-stop:hover { background-color: #c9302c; }
-
-        #status-bar { position: fixed; bottom: 0; width: 100%; background: #333; color: white; text-align: center; padding: 10px; font-size: 14px; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .list { width: 100%; max-width: 400px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; }
+        .row { display: flex; justify-content: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .row:nth-child(even) { background: #f9f9f9; }
+        .btn { background: #5cb85c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 200px; font-weight: bold; }
+        .btn:hover { background: #4cae4c; }
+        .stop { background: #d9534f; margin-top: 20px; }
+        #status { position: fixed; bottom: 0; width: 100%; background: #333; color: white; text-align: center; padding: 10px; }
     </style>
 </head>
 <body>
-
     <h1>Evaluare Națională VIII</h1>
-
-    <div class="button-list">
-        <div class="row"><button class="btn-green" onclick="trimite('1CqYKc8OoctIhT8O7L1Qw1lblZlGDqzHS', 'Examen 2025')">Examen 2025</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1LuGyGdRkqbTNB_nmrWGgKhAWidprB6ww', 'Simulare 2025')">Simulare 2025</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1_ahk8WmA7_0Xoesn4m8kaC-R0XHV5tdx', 'Model 2025')">Model 2025</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1YsntETYsy4GQE6ZEkCxGrzT3XTbMB03U', 'Rezervă 2024')">Rezervă 2024</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1qwT9HNqEtBUK7nCdlXKolkUJh3ISqQtG', 'Examen 2024')">Examen 2024</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1uiKq64F9MOhZ2S58kflcQ8pu2lD2H4az', 'Simulare 2024')">Simulare 2024</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1mOpefs6zGyn_Lk60ucwsl1YpfqZRWkUp', 'Model 2024')">Model 2024</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1CqYKc8OoctIhT8O7L1Qw1lblZlGDqzHS', 'Examen 2023')">Examen 2023</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('19kCYuc_bYmSNWkP2mtz0lU03B-rylbOx', 'Simulare 2023')">Simulare 2023</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1jP3OMsbOplvPOaXAuw9bM0-CC9_gbyQ6', 'Model 2023')">Model 2023</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('175PLlem97cVVHCCekQF-39XrRuWpKz7p', 'Rezervă 2022')">Rezervă 2022</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1wQ4AKu6G5hsJ4XGUzumMvlUYeC72ojwO', 'Examen 2022')">Examen 2022</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1aA_URg0mh_3OPhr5vNzdTmGLIqTUlxFt', 'Simulare 2022')">Simulare 2022</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1amn3e43NpeKQqmtHCKgJPurQDUjSKUPc', 'Model 2022')">Model 2022</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1X1fAavaNlpaTCTgQ2vZK4h-dCJpAzhYS', 'Examen 2021')">Examen 2021</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1eFCIvfsUbnAcQ1WRoqOInMO_ooyQuyTc', 'Simulare 2021')">Simulare 2021</button></div>
-        <div class="row"><button class="btn-green" onclick="trimite('1XO2DynqIHpFEQtBaYxWUOP2_b45wjRPi', 'Model 2021')">Model 2021</button></div>
+    <div class="list">
+        <div class="row"><button class="btn" onclick="t('1CqYKc8OoctIhT8O7L1Qw1lblZlGDqzHS', 'Examen 2025')">Examen 2025</button></div>
+        <div class="row"><button class="btn" onclick="t('1LuGyGdRkqbTNB_nmrWGgKhAWidprB6ww', 'Simulare 2025')">Simulare 2025</button></div>
+        <div class="row"><button class="btn" onclick="t('1_ahk8WmA7_0Xoesn4m8kaC-R0XHV5tdx', 'Model 2025')">Model 2025</button></div>
+        <div class="row"><button class="btn" onclick="t('1YsntETYsy4GQE6ZEkCxGrzT3XTbMB03U', 'Rezervă 2024')">Rezervă 2024</button></div>
+        <div class="row"><button class="btn" onclick="t('1qwT9HNqEtBUK7nCdlXKolkUJh3ISqQtG', 'Examen 2024')">Examen 2024</button></div>
+        <div class="row"><button class="btn" onclick="t('1uiKq64F9MOhZ2S58kflcQ8pu2lD2H4az', 'Simulare 2024')">Simulare 2024</button></div>
+        <div class="row"><button class="btn" onclick="t('1mOpefs6zGyn_Lk60ucwsl1YpfqZRWkUp', 'Model 2024')">Model 2024</button></div>
+        <div class="row"><button class="btn" onclick="t('1CqYKc8OoctIhT8O7L1Qw1lblZlGDqzHS', 'Examen 2023')">Examen 2023</button></div>
+        <div class="row"><button class="btn" onclick="t('19kCYuc_bYmSNWkP2mtz0lU03B-rylbOx', 'Simulare 2023')">Simulare 2023</button></div>
+        <div class="row"><button class="btn" onclick="t('1jP3OMsbOplvPOaXAuw9bM0-CC9_gbyQ6', 'Model 2023')">Model 2023</button></div>
+        <div class="row"><button class="btn" onclick="t('175PLlem97cVVHCCekQF-39XrRuWpKz7p', 'Rezervă 2022')">Rezervă 2022</button></div>
+        <div class="row"><button class="btn" onclick="t('1wQ4AKu6G5hsJ4XGUzumMvlUYeC72ojwO', 'Examen 2022')">Examen 2022</button></div>
+        <div class="row"><button class="btn" onclick="t('1aA_URg0mh_3OPhr5vNzdTmGLIqTUlxFt', 'Simulare 2022')">Simulare 2022</button></div>
+        <div class="row"><button class="btn" onclick="t('1amn3e43NpeKQqmtHCKgJPurQDUjSKUPc', 'Model 2022')">Model 2022</button></div>
+        <div class="row"><button class="btn" onclick="t('1X1fAavaNlpaTCTgQ2vZK4h-dCJpAzhYS', 'Examen 2021')">Examen 2021</button></div>
+        <div class="row"><button class="btn" onclick="t('1eFCIvfsUbnAcQ1WRoqOInMO_ooyQuyTc', 'Simulare 2021')">Simulare 2021</button></div>
+        <div class="row"><button class="btn" onclick="t('1XO2DynqIHpFEQtBaYxWUOP2_b45wjRPi', 'Model 2021')">Model 2021</button></div>
     </div>
-
-    <button class="btn-green btn-stop" onclick="trimite('', 'Pauză')">Oprește Testul</button>
-
-    <div id="status-bar">Status: Conectat la Firebase</div>
+    <button class="btn stop" onclick="t('', 'Pauză')">OPREȘTE TESTUL</button>
+    <div id="status">Sistem pregătit.</div>
 
     <script>
         const firebaseConfig = {
@@ -74,18 +48,13 @@
             projectId: "teste-a-8-a",
             appId: "1:814897579450:web:88bf2c7f262ed9efd90983"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        function trimite(id, nume) {
-            const urlFinal = id ? `https://drive.google.com/file/d/${id}/preview` : "";
-            db.ref('test_activ').set({
-                url: urlFinal,
-                titlu: nume
-            }).then(() => {
-                document.getElementById('status-bar').innerText = "Test lansat: " + nume;
-            });
+        function t(id, n) {
+            const url = id ? `https://drive.google.com/file/d/${id}/preview` : "";
+            db.ref('test_activ').set({ url: url });
+            document.getElementById('status').innerText = "Activ: " + n;
         }
     </script>
 </body>
