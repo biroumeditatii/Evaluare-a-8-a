@@ -1,0 +1,16 @@
+{
+  "short_name": "Evaluare8",
+  "name": "Evaluare Națională clasa a VIII-a",
+  "icons": [
+    {
+      "src": "icon.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "./",
+  "theme_color": "#2c3e50"
+}
