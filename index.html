@@ -6,6 +6,7 @@
     <title>Evaluare Elev</title>
     
     <link rel="manifest" href="manifest.json">
+    
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,12 +17,61 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #f8f9fa; font-family: sans-serif; }
-        #waiting-area { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
-        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
-        .pulse { width: 20px; height: 20px; background-color: #3498db; border-radius: 50%; margin: 20px auto; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(52, 152, 219, 0); } 100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); } }
-        iframe { width: 100%; height: 100%; border: none; display: none; }
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: #f8f9fa; 
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Zona de așteptare modernă */
+        #waiting-area { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
+        }
+
+        .card { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            text-align: center;
+            max-width: 80%;
+        }
+
+        h1 { color: #2c3e50; margin: 0 0 10px 0; font-size: 24px; }
+        p { color: #7f8c8d; font-size: 16px; margin-bottom: 20px; }
+
+        .pulse { 
+            width: 20px; 
+            height: 20px; 
+            background-color: #3498db; 
+            border-radius: 50%; 
+            margin: 0 auto; 
+            animation: pulse-animation 2s infinite; 
+        }
+
+        @keyframes pulse-animation { 
+            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); } 
+            70% { box-shadow: 0 0 0 15px rgba(52, 152, 219, 0); } 
+            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); } 
+        }
+
+        /* Iframe-ul pentru PDF */
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            display: none; 
+            background: white;
+        }
     </style>
 </head>
 <body>
@@ -29,14 +79,15 @@
     <div id="waiting-area">
         <div class="card">
             <h1>Evaluare Națională VIII</h1>
+            <p>Se așteaptă subiectele...</p>
             <div class="pulse"></div>
-            <p>Se așteaptă lansarea testului...</p>
         </div>
     </div>
 
     <iframe id="pdfViewer" src=""></iframe>
 
     <script>
+        // Configurația ta Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCMLrGCuIGtDLZAUJDTkvVHRxrFsePa2Ag",
             authDomain: "teste-a-8-a.firebaseapp.com",
@@ -44,22 +95,36 @@
             projectId: "teste-a-8-a",
             appId: "1:814897579450:web:88bf2c7f262ed9efd90983"
         };
-        firebase.initializeApp(firebaseConfig);
+
+        // Inițializare Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
         const db = firebase.database();
         const viewer = document.getElementById('pdfViewer');
         const wait = document.getElementById('waiting-area');
 
+        // Ascultare în timp real
         db.ref('test_activ').on('value', (snapshot) => {
             const data = snapshot.val();
-            if (data && data.url) {
-                viewer.src = data.url;
+            
+            if (data && data.url && data.url !== "") {
+                // Dacă avem URL, îl punem în iframe și schimbăm vizibilitatea
+                if (viewer.src !== data.url) {
+                    viewer.src = data.url;
+                }
                 viewer.style.display = "block";
                 wait.style.display = "none";
             } else {
+                // Dacă nu avem URL sau e "Pauză", revenim la ecranul de așteptare
                 viewer.src = "";
                 viewer.style.display = "none";
                 wait.style.display = "flex";
             }
+        }, (error) => {
+            console.error("Eroare Firebase:", error);
+            alert("Eroare de conexiune! Verifică internetul.");
         });
     </script>
 </body>
