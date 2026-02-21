@@ -1,6 +1,6 @@
 {
-  "short_name": "Evaluare8",
-  "name": "Evaluare Națională VIII",
+  "short_name": "Prof-EN8",
+  "name": "Control Profesor - Evaluare 8",
   "icons": [
     {
       "src": "icon.jpg",
@@ -9,10 +9,9 @@
       "purpose": "any maskable"
     }
   ],
-  "start_url": "./index.html",
-  "background_color": "#ffffff",
+  "start_url": "./profesor.html",
   "display": "standalone",
-  "display_override": ["standalone", "fullscreen"],
-  "orientation": "portrait",
-  "theme_color": "#2c3e50"
+  "background_color": "#f0f2f5",
+  "theme_color": "#333333",
+  "orientation": "portrait"
 }
